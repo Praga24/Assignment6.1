@@ -1,0 +1,34 @@
+1.
+
+a1= load '/user/acadgild/dialy_show_guests.txt' using PigStorage(',') as (year:chararray,occupation:chararray,date:chararray,group:chararray,gusetlist:chararray);
+
+a2= foreach a1 generate occupation,date;
+
+a3= foreach a2 generate occupation,ToDate(date,'MM/dd/yy')as date;
+
+a4= filter a3 by ((date > ToDate('1/11/98','MM/dd/yy')) and (date < ToDate('6/11/98','MM/dd/yy')));
+
+a5= group a4 by occupation;
+
+a6= foreach a5 generate group, COUNT(a4) as c;
+
+a7= order a6 by c desc;
+
+a8= limit a7 5;
+
+dump a8;
+
+
+2.
+
+a1 = load 'user/acadgild/dialy_show_guests.txt' using PigStorage(',') as (year:chararray,occupation:chararray,date:chararray,group:chararray,gusetlist:chararray);
+
+a2 = foreach a1 generate occupation,group;
+
+a3 = group a2 by group;
+
+a4 = foreach a3 generate group, COUNT(a2) as c;
+
+a5 = order a4 by c desc;
+
+dump a5;
